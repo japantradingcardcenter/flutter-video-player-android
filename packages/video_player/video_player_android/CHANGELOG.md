@@ -1,3 +1,8 @@
+## 2.9.6+jtcc.1
+
+* Preserve the decoder crop rectangle for texture playback using a registered SurfaceTexture.
+* Add regression tests for surface replacement, disposal, and texture selection.
+
 ## 2.9.6
 
 * Migrates to Built-in Kotlin to support AGP 9.
