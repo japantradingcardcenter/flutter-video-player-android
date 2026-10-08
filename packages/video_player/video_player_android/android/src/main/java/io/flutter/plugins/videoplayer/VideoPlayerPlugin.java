@@ -16,6 +16,7 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugins.videoplayer.platformview.PlatformVideoViewFactory;
 import io.flutter.plugins.videoplayer.platformview.PlatformViewVideoPlayer;
+import io.flutter.plugins.videoplayer.texture.CropAwareSurfaceProducer;
 import io.flutter.plugins.videoplayer.texture.TextureVideoPlayer;
 import io.flutter.view.TextureRegistry;
 
@@ -105,7 +106,8 @@ public class VideoPlayerPlugin implements FlutterPlugin, AndroidVideoPlayerApi {
 
     long id = nextPlayerIdentifier++;
     final String streamInstance = Long.toString(id);
-    TextureRegistry.SurfaceProducer handle = flutterState.textureRegistry.createSurfaceProducer();
+    TextureRegistry.SurfaceProducer handle =
+        new CropAwareSurfaceProducer(flutterState.textureRegistry.createSurfaceTexture());
     VideoPlayer videoPlayer =
         TextureVideoPlayer.create(
             flutterState.applicationContext,

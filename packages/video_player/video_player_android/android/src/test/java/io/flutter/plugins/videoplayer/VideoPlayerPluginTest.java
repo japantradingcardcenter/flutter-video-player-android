@@ -28,14 +28,15 @@ import org.robolectric.RobolectricTestRunner;
 @RunWith(RobolectricTestRunner.class)
 public class VideoPlayerPluginTest {
   @Mock private TextureRegistry mockTextureRegistry;
-  @Mock private TextureRegistry.SurfaceProducer mockSurfaceProducer;
+  @Mock private TextureRegistry.SurfaceTextureEntry mockSurfaceTexture;
   @Mock private PlatformViewRegistry mockPlatformViewRegistry;
   private VideoPlayerPlugin plugin;
 
   @Before
   public void setUp() {
     MockitoAnnotations.openMocks(this);
-    when(mockTextureRegistry.createSurfaceProducer()).thenReturn(mockSurfaceProducer);
+    when(mockTextureRegistry.createSurfaceTexture()).thenReturn(mockSurfaceTexture);
+    when(mockSurfaceTexture.id()).thenReturn(42L);
 
     FlutterPlugin.FlutterPluginBinding binding = mock(FlutterPlugin.FlutterPluginBinding.class);
     when(binding.getApplicationContext()).thenReturn(mock(Context.class));
@@ -109,6 +110,9 @@ public class VideoPlayerPluginTest {
 
       final LongSparseArray<VideoPlayer> videoPlayers = getVideoPlayers();
       assertTrue(videoPlayers.get(ids.getPlayerId()) instanceof TextureVideoPlayer);
+      assertEquals(42L, ids.getTextureId());
+      verify(mockTextureRegistry).createSurfaceTexture();
+      verify(mockTextureRegistry, never()).createSurfaceProducer();
     }
   }
 }
