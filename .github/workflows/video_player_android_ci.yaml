@@ -1,4 +1,4 @@
-name: Android video player CI
+name: Video player CI
 on:
   push:
     branches: [jtcc/video-player-android-2.9.6]
@@ -32,3 +32,9 @@ jobs:
       - run: flutter pub get
       - run: flutter analyze --no-pub
       - run: bash tool/test.sh
+      - name: Analyze and test video_player
+        working-directory: packages/video_player/video_player
+        run: |
+          flutter pub get
+          flutter analyze --no-pub
+          flutter test --no-pub

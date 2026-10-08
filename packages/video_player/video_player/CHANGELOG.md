@@ -1,3 +1,8 @@
+## 2.11.1+jtcc.1
+
+* Allow disposal to finish when audio setup or native player creation fails.
+* Avoid disposing an uninitialized native player ID.
+
 ## NEXT
 
 * Updates minimum supported SDK version to Flutter 3.38/Dart 3.10.
