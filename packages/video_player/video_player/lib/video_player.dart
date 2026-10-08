@@ -578,16 +578,20 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
       viewType: viewType,
     );
 
-    if (videoPlayerOptions?.mixWithOthers != null) {
-      await _videoPlayerPlatform.setMixWithOthers(
-        videoPlayerOptions!.mixWithOthers,
-      );
-    }
+    try {
+      if (videoPlayerOptions?.mixWithOthers != null) {
+        await _videoPlayerPlatform.setMixWithOthers(
+          videoPlayerOptions!.mixWithOthers,
+        );
+      }
 
-    _playerId =
-        (await _videoPlayerPlatform.createWithOptions(creationOptions)) ??
-        kUninitializedPlayerId;
-    _creatingCompleter!.complete(null);
+      _playerId =
+          (await _videoPlayerPlatform.createWithOptions(creationOptions)) ??
+          kUninitializedPlayerId;
+    } finally {
+      // Disposal must also finish when audio setup or native creation fails.
+      _creatingCompleter!.complete(null);
+    }
     final initializingCompleter = Completer<void>();
 
     // Apply the web-specific options
@@ -685,7 +689,9 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
         _isDisposed = true;
         _timer?.cancel();
         await _eventSubscription?.cancel();
-        await _videoPlayerPlatform.dispose(_playerId);
+        if (_playerId != kUninitializedPlayerId) {
+          await _videoPlayerPlatform.dispose(_playerId);
+        }
       }
       _lifeCycleObserver?.dispose();
     }

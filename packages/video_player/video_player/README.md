@@ -1,3 +1,7 @@
+## JTCC maintenance fork
+
+This package retains official `video_player` 2.11.1 with a fix for disposal after native player creation failures. See [JTCC_PATCHES.md](JTCC_PATCHES.md) for the scope and Git dependency configuration. The Android texture crop fix lives in the sibling `video_player_android` package.
+
 <?code-excerpt path-base="example/lib"?>
 
 # Video Player plugin for Flutter
